@@ -106,10 +106,13 @@ public struct RecordingDetailsView: View {
             ShareButton(viewStore.recordingCard.recordingEnvelop.text) {
               Image(systemName: "paperplane")
             }
+            
+
 
             Button { viewStore.send(.recordingCard(action: .transcribeTapped)) } label: {
               Image(systemName: "arrow.clockwise").padding(.grid(1))
             }
+            
 
             Spacer()
           }.iconButtonStyle()

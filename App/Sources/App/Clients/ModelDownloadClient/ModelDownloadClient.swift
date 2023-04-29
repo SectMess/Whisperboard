@@ -14,7 +14,7 @@ struct ModelDownloadClient {
 
 extension ModelDownloadClient: DependencyKey {
   static let liveValue: Self = {
-    let config: URLSessionConfiguration = .background(withIdentifier: "me.igortarasenko.whisperboard.background")
+    let config: URLSessionConfiguration = .background(withIdentifier: "com.WhisperSing.background")
     config.isDiscretionary = false
 
     let delegate = SessionDelegate()

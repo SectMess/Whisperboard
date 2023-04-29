@@ -24,7 +24,7 @@ enum VoiceModelType: String, CaseIterable {
   case small
   case mediumEN = "medium.en"
   case medium
-  case large
+  case singlish
 
   var fileName: String { "ggml-\(rawValue).bin" }
 
@@ -38,7 +38,7 @@ enum VoiceModelType: String, CaseIterable {
     case .small: return "Small"
     case .mediumEN: return "Medium (English)"
     case .medium: return "Medium"
-    case .large: return "Large"
+    case .singlish: return "Singlish"
     }
   }
 
@@ -52,7 +52,7 @@ enum VoiceModelType: String, CaseIterable {
     case .small: return "A well-balanced model, offering a good compromise between size and accuracy."
     case .mediumEN: return "The English-specific version of the medium model."
     case .medium: return "A more powerful model with even better accuracy."
-    case .large: return "The largest and most accurate model available, but it's also the slowest and most resource-intensive."
+    case .singlish: return "Fine tuned on Singlish National Speech Corpus"
     }
   }
 
@@ -62,7 +62,7 @@ enum VoiceModelType: String, CaseIterable {
     case .baseEN, .base: return "142 MB"
     case .smallEN, .small: return "466 MB"
     case .mediumEN, .medium: return "1.5 GB"
-    case .large: return "2.9 GB"
+    case .singlish: return "144 MB"
     }
   }
 
@@ -72,7 +72,7 @@ enum VoiceModelType: String, CaseIterable {
     case .baseEN, .base: return 210 * 1024 * 1024
     case .smallEN, .small: return 600 * 1024 * 1024
     case .mediumEN, .medium: return 1700 * 1024 * 1024
-    case .large: return 3300 * 1024 * 1024
+    case .singlish: return 165 * 1024 * 1024
     }
   }
 
@@ -91,7 +91,7 @@ enum VoiceModelType: String, CaseIterable {
   }
 
   private static var srcURL: URL {
-    URL(staticString: "https://huggingface.co/datasets/ggerganov/whisper.cpp/resolve/main/")
+    URL(staticString: "https://huggingface.co/SectMess/WhisperSinglish/resolve/main/")
   }
 
   static var localFolderURL: URL {

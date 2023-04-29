@@ -31,12 +31,8 @@ struct SettingsScreen: ReducerProtocol {
     case setLanguage(VoiceLanguage)
     case parallelSwitchTapped(Bool)
     case openGitHub
-    case openPersonalWebsite
     case deleteStorageTapped
     case deleteDialogConfirmed
-    case rateAppTapped
-    case reportBugTapped
-    case suggestFeatureTapped
 
     case showError(EquatableErrorWrapper)
   }
@@ -94,10 +90,7 @@ struct SettingsScreen: ReducerProtocol {
           await openURL(build.githubURL())
         }
 
-      case .openPersonalWebsite:
-        return .fireAndForget {
-          await openURL(build.personalWebsiteURL())
-        }
+
 
       case .deleteStorageTapped:
         createDeleteConfirmationDialog(state: &state)
@@ -115,20 +108,6 @@ struct SettingsScreen: ReducerProtocol {
         state.alert = .error(error)
         return .none
 
-      case .rateAppTapped:
-        return .fireAndForget {
-          await openURL(build.appStoreReviewURL())
-        }
-
-      case .reportBugTapped:
-        return .fireAndForget {
-          await openURL(build.bugReportURL())
-        }
-
-      case .suggestFeatureTapped:
-        return .fireAndForget {
-          await openURL(build.featureRequestURL())
-        }
       }
     }
   }
@@ -178,7 +157,7 @@ struct SettingsScreenView: View {
             previewConfiguration: .init(icon: .system(icon: "square.and.arrow.down", backgroundColor: .systemBlue))
           ) {
             SettingGroup(footer: .modelSelectorFooter) {}
-
+            
             SettingGroup(header: "Whisper models", backgroundColor: .DS.Background.secondary) {
               SettingCustomView(id: "models") {
                 ForEachStore(modelSelectorStore.scope(state: \.modelRows, action: ModelSelector.Action.modelRow)) { modelRowStore in
@@ -187,7 +166,7 @@ struct SettingsScreenView: View {
               }
             }
           }
-
+          
           SettingPicker(
             icon: .system(icon: "globe", backgroundColor: .systemGreen.darken(by: 0.1)),
             title: "Language",
@@ -200,32 +179,32 @@ struct SettingsScreenView: View {
               groupBackgroundColor: .DS.Background.secondary
             )
           )
-
-          #if DEBUG
-            SettingToggle(title: "Parallel chunks transcription", isOn: viewStore.binding(
-              get: \.isParallelEnabled,
-              send: { .parallelSwitchTapped($0) }
-            ))
-          #endif
+          
+#if DEBUG
+          SettingToggle(title: "Parallel chunks transcription", isOn: viewStore.binding(
+            get: \.isParallelEnabled,
+            send: { .parallelSwitchTapped($0) }
+          ))
+#endif
         }
-
-        #if DEBUG
-          SettingGroup(header: "Debug", backgroundColor: .DS.Background.secondary) {
-            SettingButton(icon: .system(icon: "ladybug", backgroundColor: .systemRed.darken(by: 0.05)), title: "Show logs") {
-              debugPresent = true
-            }
-            SettingCustomView {
-              ZStack {}.popover(present: $debugPresent) {
-                Text("Debug popup")
-                  .padding()
-                  .foregroundColor(.white)
-                  .background(.blue)
-                  .cornerRadius(16)
-              }
+        
+#if DEBUG
+        SettingGroup(header: "Debug", backgroundColor: .DS.Background.secondary) {
+          SettingButton(icon: .system(icon: "ladybug", backgroundColor: .systemRed.darken(by: 0.05)), title: "Show logs") {
+            debugPresent = true
+          }
+          SettingCustomView {
+            ZStack {}.popover(present: $debugPresent) {
+              Text("Debug popup")
+                .padding()
+                .foregroundColor(.white)
+                .background(.blue)
+                .cornerRadius(16)
             }
           }
-        #endif
-
+        }
+#endif
+        
         SettingGroup(header: "Storage", backgroundColor: .DS.Background.secondary) {
           SettingCustomView {
             VStack(alignment: .leading, spacing: .grid(1)) {
@@ -238,7 +217,7 @@ struct SettingsScreenView: View {
                   .font(.DS.bodyM)
                   .foregroundColor(.DS.Text.base)
               }
-
+              
               GeometryReader { geometry in
                 HStack(spacing: 0) {
                   LinearGradient.easedGradient(
@@ -259,61 +238,14 @@ struct SettingsScreenView: View {
             .padding(.horizontal, .grid(4))
             .padding(.vertical, .grid(2))
           }
-
+          
           SettingButton(icon: .system(icon: "trash", backgroundColor: .systemRed.darken(by: 0.1)), title: "Delete Storage", indicator: nil) {
             viewStore.send(.deleteStorageTapped)
           }
         }
-
-        SettingGroup(backgroundColor: .DS.Background.secondary) {
-          SettingButton(icon: .system(icon: "star.fill", backgroundColor: .systemYellow.darken(by: 0.05)), title: "Rate the App") {
-            viewStore.send(.rateAppTapped)
-          }
-
-          SettingButton(icon: .system(icon: "exclamationmark.triangle", backgroundColor: .systemRed), title: "Report a Bug") {
-            viewStore.send(.reportBugTapped)
-          }
-
-          SettingButton(icon: .system(icon: "sparkles", backgroundColor: .systemPurple.darken(by: 0.1)), title: "Suggest New Feature") {
-            viewStore.send(.suggestFeatureTapped)
-          }
-        }
-
-        SettingCustomView(id: "Footer", titleForSearch: "GitHub") {
-          VStack(spacing: .grid(1)) {
-            Text("v\(viewStore.appVersion)(\(viewStore.buildNumber))")
-              .font(.DS.bodyM)
-              .foregroundColor(.DS.Text.subdued)
-            Text("Made with ♥ in Amsterdam")
-              .font(.DS.bodyM)
-              .mask {
-                LinearGradient.easedGradient(
-                  colors: [
-                    .systemPurple,
-                    .systemRed,
-                  ],
-                  startPoint: .bottomLeading,
-                  endPoint: .topTrailing
-                )
-              }
-            Button { viewStore.send(.openPersonalWebsite) } label: {
-              Text("by Igor Tarasenko")
-                .font(.DS.bodyM)
-                .foregroundColor(.DS.Text.accentAlt)
-            }
-          }
-          .frame(maxWidth: .infinity)
-
-          HStack(spacing: .grid(1)) {
-            Button("Saik0s/Whisperboard") {
-              viewStore.send(.openGitHub)
-            }
-          }
-          .buttonStyle(SmallButtonStyle())
-          .frame(maxWidth: .infinity)
-        }
       }
     }
+    
     .alert(modelSelectorStore.scope(state: \.alert), dismiss: .binding(.set(\.$alert, nil)))
     .alert(store.scope(state: \.alert), dismiss: .binding(.set(\.$alert, nil)))
     .task { viewStore.send(.task) }
@@ -321,6 +253,7 @@ struct SettingsScreenView: View {
     .enableInjection()
   }
 }
+
 
 // MARK: - SmallButtonStyle
 

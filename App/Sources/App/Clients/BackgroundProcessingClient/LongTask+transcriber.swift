@@ -11,7 +11,7 @@ enum LongTaskTranscriptError: Error {
 
 extension LongTask {
   static var transcription: LongTask<RecordingInfo.ID> {
-    LongTask<RecordingInfo.ID>(identifier: "me.igortarasenko.Whisperboard") { id in
+    LongTask<RecordingInfo.ID>(identifier: "com.WhisperSing") { id in
       @Dependency(\.transcriber) var transcriber: TranscriberClient
       @Dependency(\.storage) var storage: StorageClient
       @Dependency(\.settings) var settings: SettingsClient

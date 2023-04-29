@@ -54,14 +54,14 @@ final class ShareViewController: UIViewController {
     }
 
     viewModel?.cancelExportButtonTapped = { [extensionContext] in
-      extensionContext?.cancelRequest(withError: NSError(domain: "me.igortarasenko.whisperboard", code: 0, userInfo: nil))
+      extensionContext?.cancelRequest(withError: NSError(domain: "com.WhisperSing", code: 0, userInfo: nil))
     }
 
     if let viewModel {
       hostingController = UIHostingController(rootView: ShareView(viewModel: viewModel))
     } else {
       hostingController = UIHostingController(rootView: ErrorView { [weak self] in
-        self?.extensionContext?.cancelRequest(withError: NSError(domain: "me.igortarasenko.whisperboard", code: 0, userInfo: nil))
+        self?.extensionContext?.cancelRequest(withError: NSError(domain: "com.WhisperSing", code: 0, userInfo: nil))
       })
     }
 
@@ -87,7 +87,7 @@ final class ShareViewController: UIViewController {
         await viewModel?.processInputItems(extensionContext: extensionContext)
       }
     } else {
-      extensionContext?.cancelRequest(withError: NSError(domain: "me.igortarasenko.whisperboard", code: 0, userInfo: nil))
+      extensionContext?.cancelRequest(withError: NSError(domain: "com.WhisperSing", code: 0, userInfo: nil))
     }
   }
 

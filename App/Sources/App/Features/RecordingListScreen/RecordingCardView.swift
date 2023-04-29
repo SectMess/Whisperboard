@@ -88,7 +88,11 @@ struct RecordingCardView: View {
                     .fill(Color.DS.Background.accent.opacity(0.2))
                 }
             }
+            
           }.iconButtonStyle()
+          
+          
+          //dropbox button here?
         }
       } else if viewStore.isTranscribing {
         ProgressView()

@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.whisperboard</string>
+		<string>group.WhisperSIng</string>
 	</array>
 </dict>
 </plist>
